@@ -6,12 +6,14 @@
 *::after {
   box-sizing: border-box;
 }
+
 /*
   2. Remove default margin
 */
 * {
   margin: 0;
 }
+
 /*
   3. Allow percentage-based heights in the application
 */
@@ -19,6 +21,7 @@ html,
 body {
   height: 100%;
 }
+
 /*
   Typographic tweaks!
   4. Add accessible line-height
@@ -28,6 +31,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
+
 /*
   6. Improve media defaults
 */
@@ -39,6 +43,7 @@ svg {
   display: block;
   max-width: 100%;
 }
+
 /*
   7. Remove built-in form typography styles
 */
@@ -48,6 +53,7 @@ textarea,
 select {
   font: inherit;
 }
+
 /*
   8. Avoid text overflows
 */
@@ -60,6 +66,7 @@ h5,
 h6 {
   overflow-wrap: break-word;
 }
+
 /*
   9. Create a root stacking context
 */
@@ -87,6 +94,7 @@ h6 {
   );
   color: white;
 }
+
 img {
   margin-left: 10px;
 }
@@ -96,6 +104,7 @@ img {
   display: flex;
   align-items: center;
 }
+
 /* Calculator Designing */
 .calculator {
   font-family: Arial, sans-serif;
@@ -170,6 +179,11 @@ img {
   grid-row: 2 / span 4;
 }
 
+.key--del {
+  grid-column: -2;
+  grid-row: 2 / span 1;
+}
+
 .calculator__keys button[data-action="decimal"] {
   font-size: 1.5em;
 }
@@ -180,18 +194,4 @@ img {
 
 .calculator__keys button[data-action="calculate"] {
   background-image: linear-gradient(to bottom, #fe886a, #ff7033);
-}
-
-.calculator__keys > *:active::before,
-.calculator__keys > .is-depressed::before {
-  background-color: rgba(0, 0, 0, 0.2);
-  bottom: 0;
-  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.5) inset;
-  content: "";
-  left: 0;
-  opacity: 0.3;
-  position: absolute;
-  right: 0;
-  top: 0;
-  z-index: 1;
 }

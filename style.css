@@ -176,12 +176,12 @@ img {
 
 .key--equal {
   grid-column: -2;
-  grid-row: 2 / span 4;
+  grid-row: 3 / span 3;
 }
 
 .key--del {
-  grid-column: -2;
-  grid-row: 2 / span 1;
+  grid-column: 4;
+  grid-row: 2;
 }
 
 .calculator__keys button[data-action="decimal"] {
@@ -194,4 +194,7 @@ img {
 
 .calculator__keys button[data-action="calculate"] {
   background-image: linear-gradient(to bottom, #fe886a, #ff7033);
+}
+.calculator__keys button[data-action="delete"] {
+  background-color: pink;
 }

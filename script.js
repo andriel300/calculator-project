@@ -1,4 +1,5 @@
 // Select the buttons
+const calculator = document.querySelector(".calculator");
 const display = document.querySelector(".calculator__display");
 const keys = document.querySelector(".calculator__keys");
 const operators = keys.querySelectorAll(".key--operator");
@@ -11,33 +12,31 @@ const equal = keys.querySelector("[data-action=calculate]");
 // Add event listeners for numbers
 const handleNumberClick = (event) => {
 	const clickedNumber = event.target.textContent;
-	const currentDisplay = display.textContent;
+	let currentDisplay = display.textContent;
 
 	if (currentDisplay === "0") {
 		display.textContent = clickedNumber;
 	} else if (currentDisplay.length < 15) {
 		// limit to 15 digits
-		const newDisplay = currentDisplay + clickedNumber;
-
-		// add dots to display
-		const parts = newDisplay.split(".");
-		const wholeNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-		const decimal = parts[1] ? `.${parts[1]}` : "";
-
-		display.textContent = wholeNumber + decimal;
+		if (currentDisplay.includes(".")) {
+			// append to the decimal
+			const parts = currentDisplay.split(".");
+			const wholeNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+			const decimal = parts[1] + clickedNumber;
+			display.textContent = `${wholeNumber}.${decimal}`;
+		} else {
+			// append to the whole number
+			const newDisplay = currentDisplay + clickedNumber;
+			const parts = newDisplay.split(".");
+			const wholeNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+			const decimal = parts[1] ? `.${parts[1]}` : "";
+			display.textContent = wholeNumber + decimal;
+		}
 	}
 };
 
 numbers.forEach((button) => {
 	button.addEventListener("click", handleNumberClick);
-});
-
-// Add event listeners for operators
-operators.forEach((operator) => {
-	operator.addEventListener("click", () => {
-		console.log(`Operator ${operator.textContent} clicked`);
-		// TODO: Add functionality to handle operator buttons
-	});
 });
 
 // Add event listener for clear button
@@ -59,9 +58,22 @@ const deleteButton = () => {
 del.addEventListener("click", deleteButton);
 
 // Add event listener for decimal button
-decimal.addEventListener("click", () => {
-	console.log("Decimal button clicked");
-	// TODO: Add functionality to handle decimal button
+const decimalKey = () => {
+	const currentDisplay = display.textContent;
+	if (!currentDisplay.includes(",")) {
+		display.textContent = `${currentDisplay},`;
+	}
+};
+
+decimal.addEventListener("click", decimalKey);
+
+// Add event listeners for operators
+operators.forEach((operator) => {
+	operator.addEventListener("click", () => {
+		const operatorAction = operator.getAttribute("data-action");
+		console.log(`Operator ${operatorAction} clicked`);
+		// TODO: Add functionality to handle operator buttons
+	});
 });
 
 // Add event listener for equal button

@@ -193,8 +193,25 @@ img {
 }
 
 .calculator__keys button[data-action="calculate"] {
-  background-image: linear-gradient(to bottom, #fe886a, #ff7033);
+  background-image: linear-gradient(
+    to bottom,
+    hsl(12.2, 98.7%, 70.6%),
+    hsl(17.9, 100%, 60%)
+  );
 }
+
+.calculator__keys button[data-action="calculate"]:hover {
+  background-image: linear-gradient(
+    to bottom,
+    hsl(12.2, 98.7%, 70.6%),
+    hsl(17.9, 100%, 70%)
+  );
+}
+
 .calculator__keys button[data-action="delete"] {
   background-color: pink;
+}
+
+.calculator__keys button[data-action="delete"]:hover {
+  background-color: hsl(350.4, 100%, 76.5%);
 }

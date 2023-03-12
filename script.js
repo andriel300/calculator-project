@@ -55,6 +55,19 @@ const handleNumberClick = (event) => {
 	}
 };
 
+const handleOperatorClick = () => {
+	const clickedOperator = event.target.dataset.action;
+	if (firstOperand === null) return;
+	if (operator !== null && secondOperand !== null) {
+		calculate();
+		firstOperand = result;
+		operator = clickedOperator;
+		secondOperand = null;
+	} else {
+		operator = clickedOperator;
+	}
+};
+
 // Add event listener for clear button
 const handleClearButton = () => {
 	display.textContent = 0;
@@ -82,21 +95,6 @@ const decimalKey = () => {
 };
 
 decimal.addEventListener("click", decimalKey);
-
-// Add event listeners for operators
-operators.forEach((operator) => {
-	operator.addEventListener("click", () => {
-		const operatorAction = operator.getAttribute("data-action");
-		if (
-			operatorAction === "add" ||
-			operatorAction === "subtract" ||
-			operatorAction === "multiply" ||
-			operatorAction === "divide"
-		) {
-			console.log("operator clicked");
-		}
-	});
-});
 
 // Add event listener for equal button
 equal.addEventListener("click", () => {

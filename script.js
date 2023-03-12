@@ -41,21 +41,19 @@ const calculate = () => {
 
 // Add event listeners for numbers
 const handleNumberClick = (event) => {
-	const clickedNumber = event.target.dataset.action;
+	const clickedNumber = event.target.textContent;
 	if (operator === null) {
-		firstOperand === null
-			? (firstOperand = clickedNumber)
-			: (firstOperand += clickedNumber);
+		firstOperand =
+			firstOperand === null ? clickedNumber : firstOperand + clickedNumber;
 		display.textContent = firstOperand;
 	} else {
-		secondOperand === null
-			? (secondOperand = clickedNumber)
-			: (secondOperand += clickedNumber);
+		secondOperand =
+			secondOperand === null ? clickedNumber : secondOperand + clickedNumber;
 		display.textContent = secondOperand;
 	}
 };
 
-const handleOperatorClick = () => {
+const handleOperatorClick = (event) => {
 	const clickedOperator = event.target.dataset.action;
 	if (firstOperand === null) return;
 	if (operator !== null && secondOperand !== null) {
@@ -70,13 +68,20 @@ const handleOperatorClick = () => {
 
 // Add event listener for clear button
 const handleClearButton = () => {
-	display.textContent = 0;
+	reset();
+	display.textContent = "0";
 };
 
-clear.addEventListener("click", handleClearButton);
+const handleEqualClick = () => {
+	if (operator === null || secondOperand === null) return;
+	calculate();
+	firstOperand = result;
+	operator = null;
+	secondOperand = null;
+};
 
 // Add event listener for delete button
-const deleteButton = () => {
+const handleDeleteButton = () => {
 	let displayText = display.textContent;
 	if (displayText.length > 0) {
 		displayText = displayText.substring(0, displayText.length - 1);
@@ -84,26 +89,41 @@ const deleteButton = () => {
 	display.textContent = displayText.length > 0 ? displayText : 0;
 };
 
-del.addEventListener("click", deleteButton);
-
-// Add event listener for decimal button
-const decimalKey = () => {
-	const currentDisplay = display.textContent;
-	if (!currentDisplay.includes(",")) {
-		display.textContent = `${currentDisplay},`;
+const handleDecimalClick = () => {
+	if (
+		operator === null &&
+		(firstOperand === null || !firstOperand.includes("."))
+	) {
+		if (firstOperand === null) {
+			firstOperand = "0.";
+		} else {
+			firstOperand += ".";
+		}
+		display.textContent = firstOperand;
+	} else if (
+		operator !== null &&
+		(secondOperand === null || !secondOperand.includes("."))
+	) {
+		if (secondOperand === null) {
+			secondOperand = "0.";
+		} else {
+			secondOperand += ".";
+		}
+		display.textContent = secondOperand;
 	}
 };
 
-decimal.addEventListener("click", decimalKey);
-
-// Add event listener for equal button
-equal.addEventListener("click", () => {
-	const operatorAction = equal.getAttribute("data-action");
-	if (operatorAction === "calculate") {
-		const secondValue = display.textContent;
-	}
-});
+// Add event listener to the buttons
 
 numbers.forEach((button) => {
 	button.addEventListener("click", handleNumberClick);
 });
+
+operators.forEach((button) => {
+	button.addEventListener("click", handleOperatorClick);
+});
+
+equal.addEventListener("click", handleEqualClick);
+clear.addEventListener("click", handleClearButton);
+decimal.addEventListener("click", handleDecimalClick);
+del.addEventListener("click", handleDeleteButton);

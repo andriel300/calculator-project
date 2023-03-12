@@ -34,7 +34,7 @@ const calculate = () => {
 			break;
 		case "divide":
 			if (parseFloat(secondOperand) === 0) {
-				display.textContent = "Nice try, this is not allowed";
+				display.textContent = "Nice try, this is not allowed!";
 				reset();
 				return;
 			} else {
@@ -42,7 +42,10 @@ const calculate = () => {
 			}
 			break;
 	}
-	display.textContent = result;
+	if (result.toString().length > 15) {
+		result = result.toFixed(5);
+	}
+	display.textContent = Number(result).toLocaleString();
 };
 
 // Add event listeners for numbers
@@ -51,11 +54,15 @@ const handleNumberClick = (event) => {
 	if (operator === null) {
 		firstOperand =
 			firstOperand === null ? clickedNumber : firstOperand + clickedNumber;
-		display.textContent = firstOperand;
+		display.textContent = Number(firstOperand).toLocaleString();
 	} else {
 		secondOperand =
 			secondOperand === null ? clickedNumber : secondOperand + clickedNumber;
-		display.textContent = secondOperand;
+		display.textContent = Number(secondOperand).toLocaleString();
+	}
+	const MAX_DISPLAY_LENGTH = 15;
+	if (display.textContent.length > MAX_DISPLAY_LENGTH) {
+		display.textContent = display.textContent.substring(0, MAX_DISPLAY_LENGTH);
 	}
 };
 

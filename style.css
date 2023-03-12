@@ -125,10 +125,10 @@ img {
   font-size: 2em;
   height: 3em;
   background-color: #f2f2f2;
-  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 0 10px;
+  max-width: 100%;
+  padding: 10px;
 }
 
 .calculator__keys {

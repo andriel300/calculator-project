@@ -9,10 +9,39 @@ const del = keys.querySelector("[data-action=delete]");
 const decimal = keys.querySelector("[data-action=decimal]");
 const equal = keys.querySelector("[data-action=calculate]");
 
+let firstOperand = null;
+let operator = null;
+let secondOperand = null;
+let result = null;
+
+const reset = () => {
+	firstOperand = null;
+	operator = null;
+	secondOperand = null;
+	result = null;
+};
+
+const calculate = () => {
+	switch (operator) {
+		case "add":
+			result = parseFloat(firstOperand) + parseFloat(secondOperand);
+			break;
+		case "subtract":
+			result = parseFloat(firstOperand) - parseFloat(secondOperand);
+			break;
+		case "multiply":
+			result = parseFloat(firstOperand) * parseFloat(secondOperand);
+			break;
+		case "divide":
+			result = parseFloat(firstOperand) / parseFloat(secondOperand);
+			break;
+	}
+	display.textContent = result;
+};
 // Add event listeners for numbers
 const handleNumberClick = (event) => {
 	const clickedNumber = event.target.textContent;
-	let currentDisplay = display.textContent;
+	const currentDisplay = display.textContent;
 
 	if (currentDisplay === "0") {
 		display.textContent = clickedNumber;
@@ -21,16 +50,15 @@ const handleNumberClick = (event) => {
 		if (currentDisplay.includes(".")) {
 			// append to the decimal
 			const parts = currentDisplay.split(".");
-			const wholeNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-			const decimal = parts[1] + clickedNumber;
-			display.textContent = `${wholeNumber}.${decimal}`;
+			const [wholeNumber, decimal] = parts;
+			display.textContent = `${wholeNumber}.${decimal + clickedNumber}`;
 		} else {
 			// append to the whole number
 			const newDisplay = currentDisplay + clickedNumber;
 			const parts = newDisplay.split(".");
-			const wholeNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-			const decimal = parts[1] ? `.${parts[1]}` : "";
-			display.textContent = wholeNumber + decimal;
+			const [wholeNumber, decimal = ""] = parts;
+			display.textContent =
+				wholeNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + decimal;
 		}
 	}
 };
@@ -71,22 +99,21 @@ decimal.addEventListener("click", decimalKey);
 operators.forEach((operator) => {
 	operator.addEventListener("click", () => {
 		const operatorAction = operator.getAttribute("data-action");
-		console.log(`Operator ${operatorAction} clicked`);
-
 		if (
 			operatorAction === "add" ||
 			operatorAction === "subtract" ||
 			operatorAction === "multiply" ||
 			operatorAction === "divide"
 		) {
-			console.log("This is an operator");
-			// TODO: Add functionality to handle operator buttons
+			console.log("operator clicked");
 		}
 	});
 });
 
 // Add event listener for equal button
 equal.addEventListener("click", () => {
-	console.log("Equal button clicked");
-	// TODO: Add functionality to handle equal button
+	const operatorAction = equal.getAttribute("data-action");
+	if (operatorAction === "calculate") {
+		const secondValue = display.textContent;
+	}
 });

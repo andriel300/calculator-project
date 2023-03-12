@@ -11,8 +11,23 @@ const equal = keys.querySelector("[data-action=calculate]");
 // Add event listeners for numbers
 const handleNumberClick = (event) => {
 	const clickedNumber = event.target.textContent;
-	display.textContent += clickedNumber;
+	const currentDisplay = display.textContent;
+
+	if (currentDisplay === "0") {
+		display.textContent = clickedNumber;
+	} else if (currentDisplay.length < 15) {
+		// limit to 15 digits
+		const newDisplay = currentDisplay + clickedNumber;
+
+		// add dots to display
+		const parts = newDisplay.split(".");
+		const wholeNumber = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+		const decimal = parts[1] ? `.${parts[1]}` : "";
+
+		display.textContent = wholeNumber + decimal;
+	}
 };
+
 numbers.forEach((button) => {
 	button.addEventListener("click", handleNumberClick);
 });
@@ -26,16 +41,22 @@ operators.forEach((operator) => {
 });
 
 // Add event listener for clear button
-clear.addEventListener("click", () => {
-	console.log("Clear button clicked");
-	// TODO: Add functionality to handle clear button
-});
+const handleClearButton = () => {
+	display.textContent = 0;
+};
+
+clear.addEventListener("click", handleClearButton);
 
 // Add event listener for delete button
-del.addEventListener("click", () => {
-	console.log("Delete button clicked");
-	// TODO: Add functionality to handle delete button
-});
+const deleteButton = () => {
+	let displayText = display.textContent;
+	if (displayText.length > 0) {
+		displayText = displayText.substring(0, displayText.length - 1);
+	}
+	display.textContent = displayText.length > 0 ? displayText : 0;
+};
+
+del.addEventListener("click", deleteButton);
 
 // Add event listener for decimal button
 decimal.addEventListener("click", () => {

@@ -72,7 +72,16 @@ operators.forEach((operator) => {
 	operator.addEventListener("click", () => {
 		const operatorAction = operator.getAttribute("data-action");
 		console.log(`Operator ${operatorAction} clicked`);
-		// TODO: Add functionality to handle operator buttons
+
+		if (
+			operatorAction === "add" ||
+			operatorAction === "subtract" ||
+			operatorAction === "multiply" ||
+			operatorAction === "divide"
+		) {
+			console.log("This is an operator");
+			// TODO: Add functionality to handle operator buttons
+		}
 	});
 });
 

@@ -2,18 +2,19 @@
 const display = document.querySelector(".calculator__display");
 const keys = document.querySelector(".calculator__keys");
 const operators = keys.querySelectorAll(".key--operator");
-const numbers = keys.querySelectorAll(".key--numbers");
+const numbers = keys.querySelectorAll(".key--number");
 const clear = keys.querySelector("[data-action=clear]");
 const del = keys.querySelector("[data-action=delete]");
 const decimal = keys.querySelector("[data-action=decimal]");
 const equal = keys.querySelector("[data-action=calculate]");
 
 // Add event listeners for numbers
+const handleNumberClick = (event) => {
+	const clickedNumber = event.target.textContent;
+	display.textContent += clickedNumber;
+};
 numbers.forEach((button) => {
-	button.addEventListener("click", () => {
-		console.log(`Button ${button.textContent} clicked`);
-		// TODO: Add functionality to handle number buttons
-	});
+	button.addEventListener("click", handleNumberClick);
 });
 
 // Add event listeners for operators
@@ -26,24 +27,24 @@ operators.forEach((operator) => {
 
 // Add event listener for clear button
 clear.addEventListener("click", () => {
-	console.log(`Clear button clicked`);
+	console.log("Clear button clicked");
 	// TODO: Add functionality to handle clear button
 });
 
 // Add event listener for delete button
 del.addEventListener("click", () => {
-	console.log(`Delete button clicked`);
+	console.log("Delete button clicked");
 	// TODO: Add functionality to handle delete button
 });
 
 // Add event listener for decimal button
 decimal.addEventListener("click", () => {
-	console.log(`Decimal button clicked`);
+	console.log("Decimal button clicked");
 	// TODO: Add functionality to handle decimal button
 });
 
 // Add event listener for equal button
 equal.addEventListener("click", () => {
-	console.log(`Equal button clicked`);
+	console.log("Equal button clicked");
 	// TODO: Add functionality to handle equal button
 });

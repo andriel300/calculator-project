@@ -38,34 +38,22 @@ const calculate = () => {
 	}
 	display.textContent = result;
 };
+
 // Add event listeners for numbers
 const handleNumberClick = (event) => {
-	const clickedNumber = event.target.textContent;
-	const currentDisplay = display.textContent;
-
-	if (currentDisplay === "0") {
-		display.textContent = clickedNumber;
-	} else if (currentDisplay.length < 15) {
-		// limit to 15 digits
-		if (currentDisplay.includes(".")) {
-			// append to the decimal
-			const parts = currentDisplay.split(".");
-			const [wholeNumber, decimal] = parts;
-			display.textContent = `${wholeNumber}.${decimal + clickedNumber}`;
-		} else {
-			// append to the whole number
-			const newDisplay = currentDisplay + clickedNumber;
-			const parts = newDisplay.split(".");
-			const [wholeNumber, decimal = ""] = parts;
-			display.textContent =
-				wholeNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ".") + decimal;
-		}
+	const clickedNumber = event.target.dataset.action;
+	if (operator === null) {
+		firstOperand === null
+			? (firstOperand = clickedNumber)
+			: (firstOperand += clickedNumber);
+		display.textContent = firstOperand;
+	} else {
+		secondOperand === null
+			? (secondOperand = clickedNumber)
+			: (secondOperand += clickedNumber);
+		display.textContent = secondOperand;
 	}
 };
-
-numbers.forEach((button) => {
-	button.addEventListener("click", handleNumberClick);
-});
 
 // Add event listener for clear button
 const handleClearButton = () => {
@@ -116,4 +104,8 @@ equal.addEventListener("click", () => {
 	if (operatorAction === "calculate") {
 		const secondValue = display.textContent;
 	}
+});
+
+numbers.forEach((button) => {
+	button.addEventListener("click", handleNumberClick);
 });

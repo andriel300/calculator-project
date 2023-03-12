@@ -33,7 +33,13 @@ const calculate = () => {
 			result = parseFloat(firstOperand) * parseFloat(secondOperand);
 			break;
 		case "divide":
-			result = parseFloat(firstOperand) / parseFloat(secondOperand);
+			if (parseFloat(secondOperand) === 0) {
+				display.textContent = "Nice try, this is not allowed";
+				reset();
+				return;
+			} else {
+				result = parseFloat(firstOperand) / parseFloat(secondOperand);
+			}
 			break;
 	}
 	display.textContent = result;

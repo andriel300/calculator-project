@@ -41,6 +41,10 @@ const calculate = () => {
 				result = parseFloat(firstOperand) / parseFloat(secondOperand);
 			}
 			break;
+		default:
+			display.textContent = "Invalid operator";
+			reset();
+			return;
 	}
 	if (result.toString().length > 15) {
 		result = result.toFixed(5);
@@ -52,17 +56,29 @@ const calculate = () => {
 const handleNumberClick = (event) => {
 	const clickedNumber = event.target.textContent;
 	if (operator === null) {
-		firstOperand =
-			firstOperand === null ? clickedNumber : firstOperand + clickedNumber;
+		if (firstOperand === null) {
+			firstOperand = clickedNumber;
+		} else {
+			firstOperand += clickedNumber;
+		}
 		display.textContent = Number(firstOperand).toLocaleString();
+		if (firstOperand.toString().length > MAX_DISPLAY_LENGTH) {
+			display.textContent = "Input too long!";
+			reset();
+			return;
+		}
 	} else {
-		secondOperand =
-			secondOperand === null ? clickedNumber : secondOperand + clickedNumber;
+		if (secondOperand === null) {
+			secondOperand = clickedNumber;
+		} else {
+			secondOperand += clickedNumber;
+		}
 		display.textContent = Number(secondOperand).toLocaleString();
-	}
-	const MAX_DISPLAY_LENGTH = 15;
-	if (display.textContent.length > MAX_DISPLAY_LENGTH) {
-		display.textContent = display.textContent.substring(0, MAX_DISPLAY_LENGTH);
+		if (secondOperand.toString().length > MAX_DISPLAY_LENGTH) {
+			display.textContent = "Input too long!";
+			reset();
+			return;
+		}
 	}
 };
 

@@ -52,6 +52,20 @@ const calculate = () => {
 	display.textContent = Number(result).toLocaleString();
 };
 
+const updateDisplay = () => {
+	let displayText = "";
+	if (firstOperand !== null) {
+		displayText += firstOperand;
+	}
+	if (operator !== null) {
+		displayText += ` ${operator} `;
+	}
+	if (secondOperand !== null) {
+		displayText += secondOperand;
+	}
+	display.textContent = displayText;
+};
+
 // Add event listeners for numbers
 const handleNumberClick = (event) => {
 	const clickedNumber = event.target.textContent;
@@ -62,6 +76,7 @@ const handleNumberClick = (event) => {
 		document
 			.querySelector(`[data-value="${firstOperand}"]`)
 			?.classList?.add("is-selected"); // add optional chaining here
+		updateDisplay();
 	} else {
 		secondOperand =
 			secondOperand === null ? clickedNumber : secondOperand + clickedNumber;
@@ -69,18 +84,12 @@ const handleNumberClick = (event) => {
 		document
 			.querySelector(`[data-value="${secondOperand}"]`)
 			?.classList?.add("is-selected"); // add optional chaining here
+		updateDisplay();
 	}
 	const MAX_DISPLAY_LENGTH = 15;
 	if (display.textContent.length > MAX_DISPLAY_LENGTH) {
 		display.textContent = display.textContent.substring(0, MAX_DISPLAY_LENGTH);
 	}
-};
-
-const updateDisplay = () => {
-	const displayText = `${firstOperand || "0"} ${operator || ""} ${
-		secondOperand || ""
-	}`;
-	display.textContent = displayText;
 };
 
 const handleOperatorClick = (event) => {
@@ -104,6 +113,7 @@ const handleOperatorClick = (event) => {
 // Add event listener for clear button
 const handleClearButton = () => {
 	reset();
+	updateDisplay();
 	display.textContent = "0";
 };
 
@@ -113,6 +123,7 @@ const handleEqualClick = () => {
 	firstOperand = result;
 	operator = null;
 	secondOperand = null;
+	updateDisplay();
 };
 
 function removeSelectClass() {

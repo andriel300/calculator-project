@@ -56,30 +56,31 @@ const calculate = () => {
 const handleNumberClick = (event) => {
 	const clickedNumber = event.target.textContent;
 	if (operator === null) {
-		if (firstOperand === null) {
-			firstOperand = clickedNumber;
-		} else {
-			firstOperand += clickedNumber;
-		}
+		firstOperand =
+			firstOperand === null ? clickedNumber : firstOperand + clickedNumber;
 		display.textContent = Number(firstOperand).toLocaleString();
-		if (firstOperand.toString().length > MAX_DISPLAY_LENGTH) {
-			display.textContent = "Input too long!";
-			reset();
-			return;
-		}
+		document
+			.querySelector(`[data-value="${firstOperand}"]`)
+			?.classList?.add("is-selected"); // add optional chaining here
 	} else {
-		if (secondOperand === null) {
-			secondOperand = clickedNumber;
-		} else {
-			secondOperand += clickedNumber;
-		}
+		secondOperand =
+			secondOperand === null ? clickedNumber : secondOperand + clickedNumber;
 		display.textContent = Number(secondOperand).toLocaleString();
-		if (secondOperand.toString().length > MAX_DISPLAY_LENGTH) {
-			display.textContent = "Input too long!";
-			reset();
-			return;
-		}
+		document
+			.querySelector(`[data-value="${secondOperand}"]`)
+			?.classList?.add("is-selected"); // add optional chaining here
 	}
+	const MAX_DISPLAY_LENGTH = 15;
+	if (display.textContent.length > MAX_DISPLAY_LENGTH) {
+		display.textContent = display.textContent.substring(0, MAX_DISPLAY_LENGTH);
+	}
+};
+
+const updateDisplay = () => {
+	const displayText = `${firstOperand || "0"} ${operator || ""} ${
+		secondOperand || ""
+	}`;
+	display.textContent = displayText;
 };
 
 const handleOperatorClick = (event) => {
@@ -93,6 +94,11 @@ const handleOperatorClick = (event) => {
 	} else {
 		operator = clickedOperator;
 	}
+	updateDisplay();
+	document
+		.querySelectorAll(".key--operator")
+		.forEach((el) => el.classList.remove("is-selected"));
+	event.target.classList.add("is-selected");
 };
 
 // Add event listener for clear button
@@ -108,6 +114,14 @@ const handleEqualClick = () => {
 	operator = null;
 	secondOperand = null;
 };
+
+function removeSelectClass() {
+	operators.forEach((button) => button.classList.remove("is-selected"));
+}
+
+function addSelectClass(button) {
+	button.classList.add("is-selected");
+}
 
 // Add event listener for delete button
 const handleDeleteButton = () => {
@@ -149,6 +163,13 @@ numbers.forEach((button) => {
 });
 
 operators.forEach((button) => {
+	button.addEventListener("click", () => {
+		removeSelectClass();
+		addSelectClass(button);
+	});
+});
+
+operators.forEach((button) => {
 	button.addEventListener("click", handleOperatorClick);
 });
 
@@ -156,3 +177,5 @@ equal.addEventListener("click", handleEqualClick);
 clear.addEventListener("click", handleClearButton);
 decimal.addEventListener("click", handleDecimalClick);
 del.addEventListener("click", handleDeleteButton);
+
+//  Add event listener for keyboard input

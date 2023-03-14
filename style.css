@@ -215,3 +215,7 @@ img {
 .calculator__keys button[data-action="delete"]:hover {
   background-color: hsl(350.4, 100%, 76.5%);
 }
+
+.is-selected {
+  background-color: yellow;
+}

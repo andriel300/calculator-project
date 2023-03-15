@@ -5,7 +5,7 @@ const keys = document.querySelector(".calculator__keys");
 const operators = keys.querySelectorAll(".key--operator");
 const numbers = keys.querySelectorAll(".key--number");
 const clear = keys.querySelector("[data-action=clear]");
-const del = keys.querySelector("[data-action=delete]");
+const deleteButton = keys.querySelector("[data-action=delete]");
 const decimal = keys.querySelector("[data-action=decimal]");
 const equal = keys.querySelector("[data-action=calculate]");
 
@@ -20,6 +20,14 @@ const reset = () => {
 	secondOperand = null;
 	result = null;
 };
+
+function removeSelectClass() {
+	operators.forEach((button) => button.classList.remove("is-selected"));
+}
+
+function addSelectClass(button) {
+	button.classList.add("is-selected");
+}
 
 const calculate = () => {
 	switch (operator) {
@@ -49,7 +57,7 @@ const calculate = () => {
 	if (result.toString().length > 15) {
 		result = result.toFixed(5);
 	}
-	display.textContent = Number(result).toLocaleString();
+	// display.textContent = Number(result).toLocaleString();
 };
 
 const updateDisplay = () => {
@@ -126,44 +134,33 @@ const handleEqualClick = () => {
 	updateDisplay();
 };
 
-function removeSelectClass() {
-	operators.forEach((button) => button.classList.remove("is-selected"));
-}
-
-function addSelectClass(button) {
-	button.classList.add("is-selected");
-}
-
 // Add event listener for delete button
 const handleDeleteButton = () => {
-	let displayText = display.textContent;
+	let displayText = display.textContent.trim();
+
 	if (displayText.length > 0) {
-		displayText = displayText.substring(0, displayText.length - 1);
+		displayText = displayText.slice(0, -1);
 	}
-	display.textContent = displayText.length > 0 ? displayText : 0;
+
+	if (operator === null) {
+		firstOperand = displayText || null; // reset firstOperand to null when display is cleared
+	} else {
+		secondOperand = displayText || null; // reset secondOperand to null when display is cleared
+	}
+
+	display.textContent = displayText || "0";
 };
 
 const handleDecimalClick = () => {
-	if (
-		operator === null &&
-		(firstOperand === null || !firstOperand.includes("."))
-	) {
-		if (firstOperand === null) {
-			firstOperand = "0.";
-		} else {
-			firstOperand += ".";
-		}
-		display.textContent = firstOperand;
-	} else if (
-		operator !== null &&
-		(secondOperand === null || !secondOperand.includes("."))
-	) {
-		if (secondOperand === null) {
-			secondOperand = "0.";
-		} else {
-			secondOperand += ".";
-		}
-		display.textContent = secondOperand;
+	const currentOperand = operator === null ? firstOperand : secondOperand;
+
+	if (currentOperand === null || !currentOperand.includes(".")) {
+		const decimalValue = currentOperand === null ? "0." : ".";
+		display.textContent =
+			currentOperand === null ? decimalValue : currentOperand + decimalValue;
+		operator === null
+			? (firstOperand += decimalValue)
+			: (secondOperand += decimalValue);
 	}
 };
 
@@ -187,6 +184,6 @@ operators.forEach((button) => {
 equal.addEventListener("click", handleEqualClick);
 clear.addEventListener("click", handleClearButton);
 decimal.addEventListener("click", handleDecimalClick);
-del.addEventListener("click", handleDeleteButton);
+deleteButton.addEventListener("click", handleDeleteButton);
 
 //  Add event listener for keyboard input

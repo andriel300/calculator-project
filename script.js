@@ -1,6 +1,7 @@
 // Select the buttons
 const calculator = document.querySelector(".calculator");
 const display = document.querySelector(".calculator__display");
+const previousDisplay = calculator.querySelector(".calculator__previous");
 const keys = document.querySelector(".calculator__keys");
 const operators = keys.querySelectorAll(".key--operator");
 const numbers = keys.querySelectorAll(".key--number");
@@ -9,113 +10,88 @@ const deleteButton = keys.querySelector("[data-action=delete]");
 const decimal = keys.querySelector("[data-action=decimal]");
 const equal = keys.querySelector("[data-action=calculate]");
 
-let firstOperand = null;
+let previousValue = null;
 let operator = null;
-let secondOperand = null;
-let result = null;
+let currentValue = null;
+let result = 0;
 
 const reset = () => {
-	firstOperand = null;
+	previousValue = null;
 	operator = null;
-	secondOperand = null;
+	currentValue = null;
 	result = null;
 };
 
-function removeSelectClass() {
-	operators.forEach((button) => button.classList.remove("is-selected"));
-}
-
-function addSelectClass(button) {
-	button.classList.add("is-selected");
-}
-
 const calculate = () => {
 	switch (operator) {
-		case "add":
-			result = parseFloat(firstOperand) + parseFloat(secondOperand);
+		case "+":
+			result = parseFloat(previousValue) + parseFloat(currentValue);
 			break;
-		case "subtract":
-			result = parseFloat(firstOperand) - parseFloat(secondOperand);
+		case "-":
+			result = parseFloat(previousValue) - parseFloat(currentValue);
 			break;
-		case "multiply":
-			result = parseFloat(firstOperand) * parseFloat(secondOperand);
+		case "*":
+			result = parseFloat(previousValue) * parseFloat(currentValue);
 			break;
-		case "divide":
-			if (parseFloat(secondOperand) === 0) {
+		case "÷":
+			if (parseFloat(currentValue) === 0) {
 				display.textContent = "Nice try, this is not allowed!";
 				reset();
 				return;
 			} else {
-				result = parseFloat(firstOperand) / parseFloat(secondOperand);
+				result = parseFloat(previousValue) / parseFloat(currentValue);
 			}
 			break;
-		default:
-			display.textContent = "Invalid operator";
-			reset();
-			return;
 	}
 	if (result.toString().length > 15) {
 		result = result.toFixed(5);
 	}
-	// display.textContent = Number(result).toLocaleString();
 };
 
 const updateDisplay = () => {
 	let displayText = "";
-	if (firstOperand !== null) {
-		displayText += firstOperand;
+	if (previousValue !== null) {
+		displayText += previousValue;
 	}
 	if (operator !== null) {
 		displayText += ` ${operator} `;
 	}
-	if (secondOperand !== null) {
-		displayText += secondOperand;
+	if (currentValue !== null) {
+		displayText += currentValue;
 	}
-	display.textContent = displayText;
+	display.textContent = Number(displayText).toLocaleString();
+	previousDisplay.textContent = Number(displayText).toLocaleString();
 };
 
 // Add event listeners for numbers
 const handleNumberClick = (event) => {
 	const clickedNumber = event.target.textContent;
 	if (operator === null) {
-		firstOperand =
-			firstOperand === null ? clickedNumber : firstOperand + clickedNumber;
-		display.textContent = Number(firstOperand).toLocaleString();
-		document
-			.querySelector(`[data-value="${firstOperand}"]`)
-			?.classList?.add("is-selected"); // add optional chaining here
+		previousValue =
+			previousValue === null ? clickedNumber : previousValue + clickedNumber;
+		display.textContent = previousValue;
 		updateDisplay();
 	} else {
-		secondOperand =
-			secondOperand === null ? clickedNumber : secondOperand + clickedNumber;
-		display.textContent = Number(secondOperand).toLocaleString();
-		document
-			.querySelector(`[data-value="${secondOperand}"]`)
-			?.classList?.add("is-selected"); // add optional chaining here
+		currentValue =
+			currentValue === null ? clickedNumber : currentValue + clickedNumber;
+		display.textContent = currentValue;
 		updateDisplay();
-	}
-	const MAX_DISPLAY_LENGTH = 15;
-	if (display.textContent.length > MAX_DISPLAY_LENGTH) {
-		display.textContent = display.textContent.substring(0, MAX_DISPLAY_LENGTH);
 	}
 };
 
 const handleOperatorClick = (event) => {
 	const clickedOperator = event.target.dataset.action;
-	if (firstOperand === null) return;
-	if (operator !== null && secondOperand !== null) {
+	if (previousValue === null) return;
+	if (previousValue === null && currentValue !== null) {
 		calculate();
-		firstOperand = result;
+		previousValue = result;
 		operator = clickedOperator;
-		secondOperand = null;
+		currentValue = 0;
 	} else {
 		operator = clickedOperator;
 	}
 	updateDisplay();
-	document
-		.querySelectorAll(".key--operator")
-		.forEach((el) => el.classList.remove("is-selected"));
-	event.target.classList.add("is-selected");
+	return;
 };
 
 // Add event listener for clear button
@@ -126,12 +102,15 @@ const handleClearButton = () => {
 };
 
 const handleEqualClick = () => {
-	if (operator === null || secondOperand === null) return;
+	if (operator === null || currentValue === null) return;
 	calculate();
-	firstOperand = result;
-	operator = null;
-	secondOperand = null;
-	updateDisplay();
+	if (result !== null) {
+		previousValue = result;
+		operator = null;
+		currentValue = null;
+		updateDisplay();
+		result = null;
+	}
 };
 
 // Add event listener for delete button
@@ -143,24 +122,24 @@ const handleDeleteButton = () => {
 	}
 
 	if (operator === null) {
-		firstOperand = displayText || null; // reset firstOperand to null when display is cleared
+		previousValue = displayText || null; // reset previousValue to null when display is cleared
 	} else {
-		secondOperand = displayText || null; // reset secondOperand to null when display is cleared
+		currentValue = displayText || null; // reset currentValue to null when display is cleared
 	}
 
 	display.textContent = displayText || "0";
 };
 
 const handleDecimalClick = () => {
-	const currentOperand = operator === null ? firstOperand : secondOperand;
+	const currentOperand = operator === null ? previousValue : currentValue;
 
-	if (currentOperand === null || !currentOperand.includes(".")) {
+	if (currentOperand === null || currentOperand.indexOf(".") === -1) {
 		const decimalValue = currentOperand === null ? "0." : ".";
 		display.textContent =
 			currentOperand === null ? decimalValue : currentOperand + decimalValue;
 		operator === null
-			? (firstOperand += decimalValue)
-			: (secondOperand += decimalValue);
+			? (previousValue += decimalValue)
+			: (currentValue += decimalValue);
 	}
 };
 
@@ -171,13 +150,6 @@ numbers.forEach((button) => {
 });
 
 operators.forEach((button) => {
-	button.addEventListener("click", () => {
-		removeSelectClass();
-		addSelectClass(button);
-	});
-});
-
-operators.forEach((button) => {
 	button.addEventListener("click", handleOperatorClick);
 });
 
@@ -185,5 +157,3 @@ equal.addEventListener("click", handleEqualClick);
 clear.addEventListener("click", handleClearButton);
 decimal.addEventListener("click", handleDecimalClick);
 deleteButton.addEventListener("click", handleDeleteButton);
-
-//  Add event listener for keyboard input

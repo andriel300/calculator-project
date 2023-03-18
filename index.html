@@ -15,7 +15,10 @@
       </header>
       <main class="sticky-footer__main">
         <div class="calculator">
-          <div class="calculator__display">0</div>
+          <div class="output">
+            <div class="calculator__previous"></div>
+            <div class="calculator__display"></div>
+          </div>
           <div class="calculator__keys">
             <button class="key--operator" data-action="add">+</button>
             <button class="key--operator" data-action="subtract">-</button>
@@ -34,7 +37,7 @@
             <button class="key--number">3</button>
             <button data-action="clear">AC</button>
             <button class="key--number">0</button>
-            <button data-action="decimal">,</button>
+            <button data-action="decimal">.</button>
             <button class="key--equal" data-action="calculate">=</button>
             <button class="key--del" data-action="delete">DEL</button>
           </div>

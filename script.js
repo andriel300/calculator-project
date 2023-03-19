@@ -30,4 +30,7 @@ numbers.forEach((number) => {
 	});
 });
 
+deleteButton.addEventListener("click", () => {
+	currentDisplay.innerText = currentDisplay.innerText.slice(0, -1);
+});
 clearBtn.addEventListener("click", handleClearDisplay);

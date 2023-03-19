@@ -47,8 +47,7 @@ const calculate = () => {
       break;
     case "÷":
       if (currentValue === 0) {
-        currentDisplay.innerText = "Error: Division by zero";
-        currentDisplay.style.fontSize = "12px";
+        currentDisplay.innerText = "Not possible to divide by zero";
         return;
       }
       result = previousValue / currentValue;
@@ -77,4 +76,34 @@ operatorBtn.forEach((button) => {
   button.addEventListener("click", () => {
     chooseOperator(button.innerText);
   });
+});
+
+// Listen for keyboard events on the window object
+window.addEventListener("keydown", (event) => {
+  const { key } = event; // Destructure key property from event object
+
+  // Check if key pressed is a number or a decimal point
+  if (/\d|\./.test(key)) {
+    addNumber(key);
+  }
+
+  // Check if key pressed is an operator
+  if (/[-+*/]/.test(key)) {
+    chooseOperator(key);
+  }
+
+  // Check if key pressed is the equal sign or Enter key
+  if (key === "Enter" || key === "=") {
+    calculate();
+  }
+
+  // Check if key pressed is the Backspace key
+  if (key === "Backspace") {
+    currentDisplay.innerText = currentDisplay.innerText.slice(0, -1);
+  }
+
+  // Check if key pressed is the Escape key
+  if (key === "Escape") {
+    clearDisplay();
+  }
 });

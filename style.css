@@ -142,7 +142,7 @@ img {
   /* align-items: center; */
   word-break: break-all;
   grid-column: 1 / -1;
-  /* border: 1px solid #ccc; */
+  border: 1px solid #ccc;
   border-radius: inherit;
   height: 7.2rem;
   padding: 10px;

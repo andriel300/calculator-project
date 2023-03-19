@@ -46,6 +46,11 @@ const calculate = () => {
       result = previousValue * currentValue;
       break;
     case "÷":
+      if (currentValue === 0) {
+        currentDisplay.innerText = "Error: Division by zero";
+        currentDisplay.style.fontSize = "12px";
+        return;
+      }
       result = previousValue / currentValue;
       break;
     default:

@@ -88,8 +88,14 @@ window.addEventListener("keydown", (event) => {
   }
 
   // Check if key pressed is an operator
-  if (/[-+*/]/.test(key)) {
-    chooseOperator(key);
+  if (/[-+*/×÷]/.test(key)) {
+    // Convert key to the corresponding operator symbol
+    const operatorSymbol =
+      {
+        "/": "÷",
+        "*": "×",
+      }[key] || key;
+    chooseOperator(operatorSymbol);
   }
 
   // Check if key pressed is the equal sign or Enter key

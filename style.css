@@ -142,15 +142,16 @@ img {
   /* align-items: center; */
   word-break: break-all;
   grid-column: 1 / -1;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   border-radius: inherit;
+  height: 5rem;
   padding: 10px;
 }
 
 .calculator__keys {
   background-color: #999;
   display: grid;
-  grid-gap: 1px;
+  /* grid-gap: 1px; */
   grid-template-columns: repeat(4, 1fr);
 }
 

@@ -1,82 +1,75 @@
-// Select the buttons
 const calculator = document.querySelector(".calculator");
-const currentDisplay = document.querySelector(".calculator__display");
+const currentDisplay = calculator.querySelector(".calculator__display");
 const previousDisplay = calculator.querySelector(".calculator__previous");
-const keys = document.querySelector(".calculator__keys");
-const operators = keys.querySelectorAll(".key--operator");
-const numbers = keys.querySelectorAll(".key--number");
+const keys = calculator.querySelector(".calculator__keys");
 const clearBtn = keys.querySelector("[data-action=clear]");
-const deleteButton = keys.querySelector("[data-action=delete]");
-const decimal = keys.querySelector("[data-action=decimal]");
-const equal = keys.querySelector("[data-action=calculate]");
-let operation;
+const deleteBtn = keys.querySelector("[data-action=delete]");
+const equalBtn = keys.querySelector("[data-action=calculate]");
+const operatorBtn = keys.querySelectorAll(".key--operator");
+const numberBtn = keys.querySelectorAll(".key--number");
 
-const handleClearDisplay = () => {
-	currentDisplay.innerText = "";
-	previousDisplay.innerText = "";
+let operator;
+
+const clearDisplay = () => {
+  currentDisplay.innerText = "";
+  previousDisplay.innerText = "";
 };
 
-const handleNumberClick = (number) => {
-	if (number === "." && currentDisplay.innerText.includes(".")) return;
-	currentDisplay.innerText += number;
+const addNumber = (number) => {
+  if (number === "." && currentDisplay.innerText.includes(".")) return;
+  currentDisplay.innerText += number;
 };
 
-const chooseOperation = (symbol) => {
-	if (currentDisplay.innerText === "") return;
-	calculatorCompute(symbol);
-	operation = symbol;
-	currentDisplay.innerText += symbol;
-	previousDisplay.innerText = currentDisplay.innerText;
-	currentDisplay.innerText = "";
+const chooseOperator = (selectedOperator) => {
+  if (currentDisplay.innerText === "") return;
+  calculate();
+  operator = selectedOperator;
+  currentDisplay.innerText += selectedOperator;
+  previousDisplay.innerText = currentDisplay.innerText;
+  currentDisplay.innerText = "";
 };
 
-const calculatorCompute = (symbol) => {
-	let result;
-	const secondValue = parseFloat(previousDisplay.innerText);
-	const currentValue = parseFloat(currentDisplay.innerText);
+const calculate = () => {
+  const previousValue = parseFloat(previousDisplay.innerText);
+  const currentValue = parseFloat(currentDisplay.innerText);
+  if (isNaN(previousValue) || isNaN(currentValue)) return;
 
-	if (isNaN(secondValue) || isNaN(currentValue)) return;
-
-	switch (operation) {
-		case "+":
-			result = secondValue + currentValue;
-			break;
-		case "-":
-			result = secondValue - currentValue;
-			break;
-		case "×":
-			result = secondValue * currentValue;
-			break;
-		case "÷":
-			result = secondValue / currentValue;
-			break;
-		default:
-			return;
-	}
-	currentDisplay.innerText = result;
+  let result;
+  switch (operator) {
+    case "+":
+      result = previousValue + currentValue;
+      break;
+    case "-":
+      result = previousValue - currentValue;
+      break;
+    case "×":
+      result = previousValue * currentValue;
+      break;
+    case "÷":
+      result = previousValue / currentValue;
+      break;
+    default:
+      return;
+  }
+  currentDisplay.innerText = result;
 };
 
-// Handle Event Listeners click
+// Add event listeners
+clearBtn.addEventListener("click", clearDisplay);
 
-numbers.forEach((number) => {
-	number.addEventListener("click", () => {
-		handleNumberClick(number.innerText);
-	});
+deleteBtn.addEventListener("click", () => {
+  currentDisplay.innerText = currentDisplay.innerText.slice(0, -1);
 });
 
-deleteButton.addEventListener("click", () => {
-	currentDisplay.innerText = currentDisplay.innerText.slice(0, -1);
+equalBtn.addEventListener("click", calculate);
+numberBtn.forEach((button) => {
+  button.addEventListener("click", () => {
+    addNumber(button.innerText);
+  });
 });
 
-clearBtn.addEventListener("click", handleClearDisplay);
-
-operators.forEach((symbol) => {
-	symbol.addEventListener("click", () => {
-		chooseOperation(symbol.innerText);
-	});
-});
-
-equal.addEventListener("click", () => {
-	calculatorCompute();
-	previousDisplay.innerText = "";
+operatorBtn.forEach((button) => {
+  button.addEventListener("click", () => {
+    chooseOperator(button.innerText);
+  });
 });

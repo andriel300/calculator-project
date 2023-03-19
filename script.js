@@ -1,3 +1,4 @@
+// Define constants for the calculator elements
 const calculator = document.querySelector(".calculator");
 const currentDisplay = calculator.querySelector(".calculator__display");
 const previousDisplay = calculator.querySelector(".calculator__previous");
@@ -8,20 +9,29 @@ const equalBtn = keys.querySelector("[data-action=calculate]");
 const operatorBtn = keys.querySelectorAll(".key--operator");
 const numberBtn = keys.querySelectorAll(".key--number");
 
+// Declare the operator variable for use in calculations
 let operator;
 
+// Define functions for calculator operations
 const clearDisplay = () => {
+  // Clear both display fields
   currentDisplay.innerText = "";
   previousDisplay.innerText = "";
 };
 
 const addNumber = (number) => {
+  // Check if a decimal point is already present
   if (number === "." && currentDisplay.innerText.includes(".")) return;
+
+  // Append the pressed number to the current display
   currentDisplay.innerText += number;
 };
 
 const chooseOperator = (selectedOperator) => {
+  // Do not select an operator if current display is empty
   if (currentDisplay.innerText === "") return;
+
+  // Perform calculation and update displays
   calculate();
   operator = selectedOperator;
   currentDisplay.innerText += selectedOperator;
@@ -30,10 +40,14 @@ const chooseOperator = (selectedOperator) => {
 };
 
 const calculate = () => {
+  // Parse previous and current display values as numbers
   const previousValue = parseFloat(previousDisplay.innerText);
   const currentValue = parseFloat(currentDisplay.innerText);
+
+  // Exit calculation if either value is not a number
   if (isNaN(previousValue) || isNaN(currentValue)) return;
 
+  // Calculate result based on selected operator
   let result;
   switch (operator) {
     case "+":
@@ -55,25 +69,30 @@ const calculate = () => {
     default:
       return;
   }
+
+  // Update current display with the result of calculation
   currentDisplay.innerText = result;
 };
 
 // Add event listeners
 clearBtn.addEventListener("click", clearDisplay);
+equalBtn.addEventListener("click", calculate);
 
 deleteBtn.addEventListener("click", () => {
+  // Remove the last character from current display
   currentDisplay.innerText = currentDisplay.innerText.slice(0, -1);
 });
 
-equalBtn.addEventListener("click", calculate);
 numberBtn.forEach((button) => {
   button.addEventListener("click", () => {
+    // Add the pressed number to the current display
     addNumber(button.innerText);
   });
 });
 
 operatorBtn.forEach((button) => {
   button.addEventListener("click", () => {
+    // Select the pressed operator and perform calculation
     chooseOperator(button.innerText);
   });
 });
